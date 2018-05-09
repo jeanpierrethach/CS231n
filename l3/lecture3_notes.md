@@ -7,7 +7,7 @@
 1. **Loss function** that quantifies our unhappiness with the scores across the training data.
 2. Efficiently finding the parameters that minimize the loss function **(optimization)**.
 
-Given an example (x<sub>i</sub>, y<sub>i</sub>) where x<sub>i</sub> is the pixel values of the image and where y<sub>i</sub> is the label or targer (integer).
+Given an example (x<sub>i</sub>, y<sub>i</sub>) where x<sub>i</sub> is the pixel values of the image and where y<sub>i</sub> is the label or target (integer).
 
 Loss over the dataset is a sum of loss over examples:
 
@@ -19,7 +19,7 @@ The final loss L will be the average of these losses summed over the entire data
 
 ### Multiclass SVM loss
 
-Given an example (x<sub>i</sub>, y<sub>i</sub>) where x<sub>i</sub> is the pixel values of the image and where y<sub>i</sub> is the label or targer (integer) and using the shorthand for the scores vector. 
+Given an example (x<sub>i</sub>, y<sub>i</sub>) where x<sub>i</sub> is the pixel values of the image and where y<sub>i</sub> is the label or target (integer) and using the shorthand for the scores vector. 
 
 - s<sub>j</sub> = f(x<sub>i</sub>, W)<sub>j</sub>
 
@@ -67,7 +67,9 @@ L = (2.9 + 0 + 12.9)/3 = 5.27
 
 ## Q: How do you choose the plus one?
 
-It turns out that this is somewhat of an arbitrary choice because we don't actually care about the absolute values of the scores in this loss function, `we only care about the relative differences between the scores`. We only care that the correct score is much greater than the incorrect scores.
+It turns out that this is somewhat of an arbitrary choice because we don't actually care about the absolute values of the scores in this loss function, `we only care about the relative differences between the scores`. 
+
+We only care that the correct score is much greater than the incorrect scores.
 
 If you imagine scaling up your whole W up or down, it rescales all the scores correspondingly.
 
@@ -240,10 +242,10 @@ SVM will get the data point over the bar to be correctly classfied and then just
 **In practice**, it tends to not make a huge difference, they tend to perform pretty similarly.
 
 ## Recap
-- We have some `dataset of xs and ys`.
-- We use a `linear classifier` to get some `score function` to `compute our scores S from our inputs x`.
-- Then we'll use a `loss function` (softmax or SVM or some other loss function) to compute `how quantitatively bad were our predictions` compared to this `ground true targets y`.
-- We'll often augment this loss function with a `regularization term` that tries to trade off between `fitting the training data` and `preferring simpler models`.
+- We have some **dataset of xs and ys**.
+- We use a **linear classifier** to get some **score function** to compute our **scores S** from our **inputs x**.
+- Then we'll use a **loss function** (softmax or SVM or some other loss function) to compute how **quantitatively bad** were **our predictions** compared to this **ground true targets y**.
+- We'll often augment this loss function with a **regularization term** that tries to trade off between **fitting the training data** and **preferring simpler models**.
 
 ## Optimization
 
