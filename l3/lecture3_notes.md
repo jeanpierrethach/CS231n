@@ -5,7 +5,7 @@
 ## Loss Function and Optimization
 
 1. **Loss function** that quantifies our unhappiness with the scores across the training data.
-    - Also referred to as the **cost function** or the **objectif=ve**
+    - Also referred to as the **cost function** or the **objective**
 2. Efficiently finding the parameters that minimize the loss function **(optimization)**.
 
 Given an example (x<sub>i</sub>, y<sub>i</sub>) where x<sub>i</sub> is the pixel values of the image and where y<sub>i</sub> is the label or target (integer).
