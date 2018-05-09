@@ -5,6 +5,7 @@
 ## Loss Function and Optimization
 
 1. **Loss function** that quantifies our unhappiness with the scores across the training data.
+    - Also referred to as the **cost function** or the **objectif=ve**
 2. Efficiently finding the parameters that minimize the loss function **(optimization)**.
 
 Given an example (x<sub>i</sub>, y<sub>i</sub>) where x<sub>i</sub> is the pixel values of the image and where y<sub>i</sub> is the label or target (integer).
@@ -17,7 +18,7 @@ We have to define some loss function L_i which will take in the predicted scores
 
 The final loss L will be the average of these losses summed over the entire dataset over each of the N examples.
 
-### Multiclass SVM loss
+### Multiclass Support Vector Machine (SVM) loss
 
 Given an example (x<sub>i</sub>, y<sub>i</sub>) where x<sub>i</sub> is the pixel values of the image and where y<sub>i</sub> is the label or target (integer) and using the shorthand for the scores vector. 
 
@@ -106,7 +107,7 @@ But by conventions we omit the correct class so that our minimum loss is zero.
 
 `Doesn't change`. The number of classes is going to be fixed ahead of time when we select our dataset, so that's just rescaling the whole loss function by a constant. So it doesn't really matter because we don't really care for the true values of the scores or the true value of the loss.
 
-## Q: What if we added a square term to the loss formulation?
+## Q: What if we added a square term to the loss formulation (Squared hinge loss SVM or L2-SVM)?
 
 ![](resources/eq3.png)
 
@@ -136,8 +137,7 @@ With W twice as large (2W), it also has L = 0.
 
 ## Regularization
 
-**Data loss**: Model predictions should match training 
-data
+**Data loss**: Represents the average loss Li over all examples. The model predictions should match training data.
 
 What we have done is written down only a loss in terms of the data and we've only told our classifier that it should try to find the W that fits the training data.
 
@@ -155,6 +155,12 @@ We really care about the performance of the classifier on test data.
 - Lambda : regularization strength (hyperparameter)
 - R: regularization penalty
 
+The multiclass SVM loss becomes in Its full form:
+
+![](resources/svm_full_form_l2_norm.png)
+
+* There is no simple way of setting the lambda hyperparameter, it is usually determined by cross-validation
+
 ### Occam's Razor:
 **"Among competing hypotheses, the simplest is the best"** - William of Ockham, 1285 - 1347
 
@@ -170,7 +176,21 @@ Either you can constrain your model class to just not contain the more powerful,
 
 #### L2 regularization
 
+![](resources/l2_norm.png)
+
+The most common regularization penalty is the L2 norm that discourages large weights through an elementwise quadratic penalty over all parameters.
+
 Euclidean norm of this weight vector W, or sometimes the squared norm or half the squared norm.
+
+- The most appealing property is that penalizing large weights tends to improve generalization, because it means that no input dimension can have a very large influence on the scores all by itself.
+
+- Including the L2 penalty leads to the appealing **max margin** property in SVMs [CS229 lecture notes](http://cs229.stanford.edu/notes/cs229-notes3.pdf)
+
+### Example:
+
+Suppose that we have some input vector **x=[1,1,1,1]** and two weight vectors **w1=[1,0,0,0]**, **w2=[0.25,0.25,0.25,0.25]**. Then **transposed w1x = transposed w2x = 1**. 
+
+So both weight vectors lead to the same dot product, but the L2 penalty of w1 is 1.0 while the L2 penalty of w2 is only 0.25. Therefore, according to the L2 penalty the weight vector w2 would be preferred since it achieves a lower regularization loss. Intuitively, this is because the weights in w2 are smaller and more diffuse. Since the L2 penalty prefers smaller and more diffuse weight vectors, the final classifier is encouraged to take into account all input dimensions to small amounts rather than a few input dimensions and very strongly.
 
 #### L1 regularization
 
@@ -199,7 +219,12 @@ The general intuition behind L1 is that it generally prefers sparse solutions, t
 
 The way of measuring complexity for L1 is maybe the number of non-zero entries.
 
-## Softmax Classifier (Multinomial Logistic Regression or softmax loss)
+### Side notes
+- Another commonly used form is the *One-Vs-All* (OVA) SVM which trains independent binary SVM for each class vs. all other classes.
+- Related, but less common to see in practice is also the *All-Vs-All* (AVA) strategy.
+- You may also see the *Structured SVM*, which maximizes the margin between the score of the correct class and the score of the highest-scoring incorrect runner-up class.
+
+## Softmax Classifier (Multinomial Logistic Regression)
 
 Takes the scores and we exponentiate them so that they become positive, then we renormalize them by the sum of those exponents.
 
@@ -209,11 +234,32 @@ There is this computed probability distribution that's implied by our scores and
 
 ![](resources/softmax_1.png)
 
+We replace the *hinge loss* with a **cross-entropy loss** that has the form:
+
+![](resources/cross_entropy.png)
+
 `Our loss will be the negative log of the probability of our true class.`
 
-We want the probability to be close to one.
+The cross-entropy objective *wants* the predicted distribution to have all of its mass on the correct answer. We want the probability to be close to one.
 
 Log is a monotonic function, so if we maximize log P of correct class, that means we want that to be high, but loss function measure badness not goodness so we take the negative log instead.
+
+### Pratical issues: Numeric stability
+
+**In practice**, the terms e<sup>f<sub>y<sub>i</sub></sub></sup> and ![](resources/softmax_term.png) may be very large due to the exponentials. Dividing large numbers can be numerically unstable. So if we use this normalization trick that multiply the top and bottom of the fraction by a constant *C* and push it into the sum, we get the following (mathematically equivalent) expression: 
+
+![](resources/numeric_stability_softmax_func.png)
+
+A common choice for *C* is to set **logC = -max<sub>j</sub>f<sub>j</sub>**. This simply states that we should shift the values inside the vector *f* so that the highest value is zero
+
+```
+f = np.array([123, 456, 789]) # example with 3 classes and each having large scores
+p = np.exp(f) / np.sum(np.exp(f)) # Bad: Numeric problem, potential blowup
+
+# instead: first shift the values of f so that the highest number is 0:
+f -= np.max(f) # f becomes [-666, -333, 0]
+p = np.exp(f) / np.sum(np.exp(f)) # safe to do, gives the correct answer
+```
 
 ## Q: What is the min/max of the softmax loss?
 
@@ -246,6 +292,16 @@ SVM will get the data point over the bar to be correctly classfied and then just
 - We use a **linear classifier** to get some **score function** to compute our **scores S** from our **inputs x**.
 - Then we'll use a **loss function** (softmax or SVM or some other loss function) to compute how **quantitatively bad** were **our predictions** compared to this **ground true targets y**.
 - We'll often augment this loss function with a **regularization term** that tries to trade off between **fitting the training data** and **preferring simpler models**.
+
+## In summary
+
+- We defined a **score function** from image pixels to class scores (in this section, a linear function that depends on weights **W** and biases **b**).
+
+- Unlike kNN classifier, the advantage of this **parametric approach** is that once we learn the parameters we can discard the training data. Additionally, the prediction for a new test image is fast since it requires a single matrix multiplication with **W**, not an exhaustive comparison to every single training example.
+
+- We introduced the **bias tric**k, which allows us to fold the bias vector into the weight matrix for convenience of only having to keep track of one parameter matrix.
+
+- We defined a **loss function** (we introduced two commonly used losses for linear classifiers: the **SVM** and the **Softmax**) that measures how compatible a given set of parameters is with respect to the ground truth labels in the training dataset. We also saw that the loss function was defined in such way that making good predictions on the training data is equivalent to having a small loss.
 
 ## Optimization
 
