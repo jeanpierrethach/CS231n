@@ -146,6 +146,8 @@ Useful for small datasets, but not used too frequently in deep learning.
 
 **In practice**, people prefer to avoid cross-validation in favor of having a single validation split, since cross-validation can be computationally expensive. Typical number of folds you can see in practice would be 3-fold, 5-fold or 10-fold cross-validation.
 
+The splits people tend to use is between 50% to 90% for the training data and the rest for the validation set.
+
 https://en.wikipedia.org/wiki/Training,_test,_and_validation_sets
 
 ### Validation set
