@@ -14,7 +14,7 @@ Loss over the dataset is a sum of loss over examples:
 
 ![](resources/eq1.png)
 
-We have to define some loss function L_i which will take in the predicted scores coming out of the function *f* together with the true target or label Y and give us some quantitative value for how bad tose predictions are for that training example.
+We have to define some loss function L_i which will take in the predicted scores coming out of the function *f* together with the true target or label Y and give us some quantitative value for how bad those predictions are for that training example.
 
 The final loss L will be the average of these losses summed over the entire dataset over each of the N examples.
 
@@ -196,7 +196,7 @@ So both weight vectors lead to the same dot product, but the L2 penalty of w1 is
 
 Penalizing the L1 norm of the weight vector.
 
-Proprety:
+Propriety:
 - Encourage sparsity in this matrix W
 
 #### Elastic net 
@@ -283,7 +283,7 @@ Because e^0 = 1.
 
 ![](resources/softmax_SVM.png)
 
-SVM will get the data point over the bar to be correctly classfied and then just give up, it doesn't care about the data point anymore. Whereas softmax will just always try to continually improve every single data point to get better and better.
+SVM will get the data point over the bar to be correctly classified and then just give up, it doesn't care about the data point anymore. Whereas softmax will just always try to continually improve every single data point to get better and better.
 
 **In practice**, it tends to not make a huge difference, they tend to perform pretty similarly.
 
@@ -299,7 +299,7 @@ SVM will get the data point over the bar to be correctly classfied and then just
 
 - Unlike kNN classifier, the advantage of this **parametric approach** is that once we learn the parameters we can discard the training data. Additionally, the prediction for a new test image is fast since it requires a single matrix multiplication with **W**, not an exhaustive comparison to every single training example.
 
-- We introduced the **bias tric**k, which allows us to fold the bias vector into the weight matrix for convenience of only having to keep track of one parameter matrix.
+- We introduced the **bias trick**, which allows us to fold the bias vector into the weight matrix for convenience of only having to keep track of one parameter matrix.
 
 - We defined a **loss function** (we introduced two commonly used losses for linear classifiers: the **SVM** and the **Softmax**) that measures how compatible a given set of parameters is with respect to the ground truth labels in the training dataset. We also saw that the loss function was defined in such way that making good predictions on the training data is equivalent to having a small loss.
 
@@ -383,7 +383,7 @@ This tells globally what colors are in this image.
 
 ### Histogram of Oriented Gradients (HOG)
 - Feature descriptor for the purpose of object detection
-    - The technique counts occurences of gradient orientation in localized portions of an image.
+    - The technique counts occurrences of gradient orientation in localized portions of an image.
 
 Take our image and divide it into 8x8 pixel regions. For each region, compute what is the dominant edge direction of each pixel, quantize those edge directions into several buckets and then within each of those regions, compute a histogram over these different edge orientations.
 
