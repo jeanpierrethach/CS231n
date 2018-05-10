@@ -63,7 +63,7 @@ Train: O(1)
 
 Predict: O(N)
 
-We want classifiers that are `fast` at predication; `slow` for training is ok
+We want classifiers that are `fast` at prediction; `slow` for training is ok
 
 ## k-Nearest Neighbors
 An object is classified by a majority vote of its neighbors, with the object being assigned to the class most common among its *k* nearest neighbors.
