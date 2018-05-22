@@ -119,7 +119,7 @@ The whole point of a loss function is to quantify how bad are different mistakes
 
 ### Multiclass SVM Loss: Example
 
-```
+```python
 def L_i_vectorized(x, y, W):
     scores = W.dot(x)
     margins = np.maximum(scores - scores[y] + 1)
@@ -252,7 +252,7 @@ Log is a monotonic function, so if we maximize log P of correct class, that mean
 
 A common choice for *C* is to set **logC = -max<sub>j</sub>f<sub>j</sub>**. This simply states that we should shift the values inside the vector *f* so that the highest value is zero
 
-```
+```python
 f = np.array([123, 456, 789]) # example with 3 classes and each having large scores
 p = np.exp(f) / np.sum(np.exp(f)) # Bad: Numeric problem, potential blowup
 
@@ -336,7 +336,7 @@ When doing the numerical gradient checking, you'll tend to scale down the parame
 
 We use the gradient at every time step to determine where to step next
 
-```
+```python
 # Vanilla Gradient Descent
 
 while True:
@@ -351,7 +351,7 @@ while True:
 
 Rather than computing the loss and gradient over the entire training set, instead at every iteration we sample some small set of training examples, called a minibatch (32, 64, 128, etc.) and then we'll use the small minibatch to compute an estimate of the full sum and an estimate of the true gradient.
 
-```
+```python
 # Vanilla Minibatch Gradient Descent
 
 while True:

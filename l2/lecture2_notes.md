@@ -34,12 +34,12 @@ e.g. 800 x 600 x 3
 3. `Evaluation`: Evaluate the classifier on new images.
 -  In the end, we evaluate the quality of the classifier by asking it to predict labels for a new set of images that it has never seen before. We will then compare the true labels of these images to the ones predicted by the classifier.
 
-```
+```python
 def train(images, labels):
     ...
     return model
 ```
-```
+```python
 def predict(model, test_images):
     ...
     return test_labels
@@ -71,13 +71,13 @@ If k = 1, then the object is simply assigned to the class of that single nearest
 
 
 - Load CIFAR-10 data into memory and stretch out the images as rows
-```
+```python
 Xtr, Ytr, Xte, Yte = load_CIFAR10('data/cifar10/') # a magic function we provide
 # flatten out all images to be one-dimensional
 Xtr_rows = Xtr.reshape(Xtr.shape[0], 32 * 32 * 3) # Xtr_rows becomes 50000 x 3072
 Xte_rows = Xte.reshape(Xte.shape[0], 32 * 32 * 3) # Xte_rows becomes 10000 x 3072
 ```
-```
+```python
 nn = NearestNeighbor() # create a Nearest Neighbor classifier class
 nn.train(Xtr_rows, Ytr) # train the classifier on the training images and labels
 Yte_predict = nn.predict(Xte_rows) # predict labels on the test images
@@ -85,7 +85,7 @@ Yte_predict = nn.predict(Xte_rows) # predict labels on the test images
 # of examples that are correctly predicted (i.e. label matches)
 print 'accuracy: %f' % ( np.mean(Yte_predict == Yte) )
 ```
-```
+```python
 import numpy as np
 
 class NearestNeighbor(object):
@@ -155,7 +155,7 @@ https://en.wikipedia.org/wiki/Training,_test,_and_validation_sets
 
 - Select best performing approach using the validation data
 
-```
+```python
 # assume we have Xtr_rows, Ytr, Xte_rows, Yte as before
 # recall Xtr_rows is 50,000 x 3072 matrix
 Xval_rows = Xtr_rows[:1000, :] # take first 1000 for validation
